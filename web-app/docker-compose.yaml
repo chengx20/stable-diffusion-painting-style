@@ -1,0 +1,27 @@
+# docker-compose.yaml
+version: '3.12'
+
+services:
+  fastapi:
+    container_name: ai-art-app
+    build: .
+    restart: always
+
+    # If you had any HF_TOKEN for private models, you can inject it here:
+    # environment:
+    #   - HUGGINGFACE_TOKEN=${HUGGINGFACE_TOKEN}
+
+    ports:
+      - "4777:4777"
+
+    volumes:
+      # so you can edit code & frontend locally and see live changes
+      - .:/app
+      # and your fine-tuned model directory
+      - ./fine-tuned-model:/app/fine-tuned-model
+
+    command: >
+      uvicorn main:app
+      --host 0.0.0.0
+      --port 4777
+      --reload
